@@ -724,7 +724,7 @@ def main(_):
     #   show_memory=True)
 
     # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=100)
-    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=30)
+    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=10)
     estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=[profiling_hook])
 
   if FLAGS.do_eval or FLAGS.do_predict:
