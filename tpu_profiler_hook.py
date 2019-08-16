@@ -86,9 +86,13 @@ class TPUProfilerHook(tf.train.SessionRunHook):
     self._global_step_tensor = tf.train.get_or_create_global_step()  # pylint: disable=protected-access
 
   def before_run(self, run_context):
+    with open('outputSTATUS', 'w') as f:
+      f.write("going in")
     return tf.train.SessionRunArgs({"global_step": self._global_step_tensor})
 
   def after_run(self, run_context, run_values):
+    with open('outputSTATUS', 'w') as f:
+      f.write("IT WORKED MOTHERFUCKER")
     stale_global_step = run_values.results["global_step"]
     if not self._ran_first_step:
       # Update the timer so that it does not activate until N steps or seconds
