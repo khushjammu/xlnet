@@ -28,6 +28,7 @@ from classifier_utils import PaddingInputExample
 from classifier_utils import convert_single_example
 from prepro_utils import preprocess_text, encode_ids
 
+from tpu_profiler_hook import TPUProfilerHook
 
 # Model
 flags.DEFINE_string("model_config_path", default=None,
@@ -441,8 +442,7 @@ def file_based_convert_examples_to_features(
   writer.close()
 
 
-def file_based_input_fn_builder(input_file, seq_length, is_training,
-                                drop_remainder):
+def file_based_input_fn_builder(input_file, seq_length, is_training, drop_remainder):
   """Creates an `input_fn` closure to be passed to TPUEstimator."""
 
 
@@ -716,7 +716,15 @@ def main(_):
         is_training=True,
         drop_remainder=True)
 
-    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps)
+    # i think insert the hook here?
+
+    # don't try this one just yet
+    # profiling_hook = tf.train.ProfilerHook(save_steps=100,
+    #   output_dir=FLAGS.model_dir,
+    #   show_memory=True)
+
+    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=100)
+    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=[profiling_hook])
 
   if FLAGS.do_eval or FLAGS.do_predict:
     if FLAGS.eval_split == "dev":
