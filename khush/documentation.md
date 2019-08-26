@@ -44,8 +44,8 @@ python run_classifier.py \
   --eval_all_ckpt=True \
   --task_name=imdb \
   --data_dir=/home/jammu55048/aclImdb \
-  --output_dir=${GS_ROOT}/proc_data/imdb \
-  --model_dir=${GS_ROOT}/exp/imdb \
+  --output_dir=${GS_ROOT}/experimentation_phase_2/trial_2/proc_data/imdb \
+  --model_dir=${GS_ROOT}/experimentation_phase_2/trial_2/exp/imdb \
   --uncased=False \
   --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
   --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \

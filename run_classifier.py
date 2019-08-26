@@ -620,10 +620,12 @@ def get_model_fn(n_class):
             reduce_fn=tf.reduce_mean)
       else:
         host_call = None
-
+      # might have to insert profiling hook here. hmmm......
+      # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=5)
+      profiling_hook = 
       train_spec = tf.contrib.tpu.TPUEstimatorSpec(
           mode=mode, loss=total_loss, train_op=train_op, host_call=host_call,
-          scaffold_fn=scaffold_fn)
+          scaffold_fn=scaffold_fn, training_hooks=[profiling_hook])
     else:
       train_spec = tf.estimator.EstimatorSpec(
           mode=mode, loss=total_loss, train_op=train_op)
@@ -724,7 +726,7 @@ def main(_):
     #   show_memory=True)
 
     # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=100)
-    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=10)
+    # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=5)
     estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=[profiling_hook])
 
   if FLAGS.do_eval or FLAGS.do_predict:
