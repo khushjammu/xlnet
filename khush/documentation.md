@@ -49,7 +49,7 @@ python run_classifier.py \
   --uncased=False \
   --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
   --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
-  --init_checkpoint==${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
   --max_seq_length=512 \
   --train_batch_size=32 \
   --eval_batch_size=8 \

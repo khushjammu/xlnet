@@ -35,12 +35,7 @@ class TPUProfilerHook(tf.train.SessionRunHook):
   10 seconds.
   """
 
-  def __init__(self,
-               tpu,
-               output_dir,
-               save_steps=None,
-               save_secs=None,
-               tpu_profiler_command=None):
+  def __init__(self, tpu, output_dir, save_steps=None, save_secs=None, tpu_profiler_command=None):
     """Initializes a hook that takes periodic profiling snapshots.
 
     Args:
@@ -57,6 +52,8 @@ class TPUProfilerHook(tf.train.SessionRunHook):
     Raises:
       ValueError: if `tpu` is not a string.
     """
+    with open('outputSTATUS', 'w+') as f:
+      f.write("__init__")
     if not isinstance(tpu, str):
       raise ValueError("--tpu should be provided with a string.")
 
@@ -83,16 +80,18 @@ class TPUProfilerHook(tf.train.SessionRunHook):
     self._ran_first_step = False
 
   def begin(self):
+    with open('outputSTATUS', 'w+') as f:
+      f.write("begin")
     self._global_step_tensor = tf.train.get_or_create_global_step()  # pylint: disable=protected-access
 
   def before_run(self, run_context):
-    with open('outputSTATUS', 'w') as f:
-      f.write("going in")
+    with open('outputSTATUS', 'w+') as f:
+      f.write("before_run")
     return tf.train.SessionRunArgs({"global_step": self._global_step_tensor})
 
   def after_run(self, run_context, run_values):
-    with open('outputSTATUS', 'w') as f:
-      f.write("IT WORKED MOTHERFUCKER")
+    with open('outputSTATUS', 'w+') as f:
+      f.write("after_run")
     stale_global_step = run_values.results["global_step"]
     if not self._ran_first_step:
       # Update the timer so that it does not activate until N steps or seconds
@@ -109,6 +108,8 @@ class TPUProfilerHook(tf.train.SessionRunHook):
 
   def _collect_tpu_profile(self, step):
     """Run capture_tpu_profile if not already running."""
+    with open('outputSTATUS', 'w+') as f:
+      f.write("_collect_tpu_profile")
 
     if self._running_process is not None:
       exit_code = self._running_process.poll()
