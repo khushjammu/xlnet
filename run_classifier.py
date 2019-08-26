@@ -621,8 +621,8 @@ def get_model_fn(n_class):
       else:
         host_call = None
       # might have to insert profiling hook here. hmmm......
-      # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=5)
-      profiling_hook = 
+      profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=5)
+      # profiling_hook = 
       train_spec = tf.contrib.tpu.TPUEstimatorSpec(
           mode=mode, loss=total_loss, train_op=train_op, host_call=host_call,
           scaffold_fn=scaffold_fn, training_hooks=[profiling_hook])
