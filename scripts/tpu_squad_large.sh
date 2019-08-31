@@ -6,7 +6,7 @@ INIT_CKPT_DIR=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16
 
 #### google storage path
 GS_ROOT=gs://khush_ee
-GS_INIT_CKPT_DIR=${GS_ROOT}/${INIT_CKPT_DIR}
+GS_INIT_CKPT_DIR=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16
 GS_PROC_DATA_DIR=${GS_ROOT}/proc_data/squad
 GS_MODEL_DIR=${GS_ROOT}/experiment/squad
 
