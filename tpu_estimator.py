@@ -78,7 +78,7 @@ from tensorflow.python.util import function_utils
 from tensorflow.python.util import nest
 from tensorflow.python.util import tf_inspect
 
-from tpu_profiler_hook import TPUProfilerHook
+# from tpu_profiler_hook import TPUProfilerHook
 
 _INITIAL_LOSS = 1e7
 _ZERO_LOSS = 0.
@@ -2637,10 +2637,10 @@ class TPUEstimator(estimator_lib.Estimator):
             
             # wasn't printed in phase 2 trial 8. probably b/c didn't use `logging`
             # print("APPENDING TPU PROFILER HOOK")
-            logging.info("appending TPUProfilerHook")
-            hooks.append(
-              TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=logging_hook_frequency)
-              )
+            # logging.info("appending TPUProfilerHook")
+            # hooks.append(
+            #   TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=logging_hook_frequency)
+            #   )
             examples_hook._set_steps_per_run(  # pylint: disable=protected-access
                 self._config.tpu_config.iterations_per_loop)
             hooks.append(examples_hook)

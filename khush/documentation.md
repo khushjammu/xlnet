@@ -188,7 +188,71 @@ python run_classifier.py \
 
 It's taking too long. I'm cutting down the number of iterations.
 
-*FAILED.* Couldn't get it working. Whatever — will use my current way of doing it. 
+~~*FAILED.* Couldn't get it working. Whatever — will use my current way of doing it.~~
+
+#### Trial 10
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=True \
+  --eval_all_ckpt=True \
+  --task_name=imdb \
+  --data_dir=/home/jammu55048/aclImdb \
+  --output_dir=${GS_ROOT}/experimentation_phase_2/trial_10/proc_data/imdb \
+  --model_dir=${GS_ROOT}/experimentation_phase_2/trial_10/exp/imdb \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=512 \
+  --train_batch_size=32 \
+  --eval_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=2e-5 \
+  --train_steps=4000 \
+  --warmup_steps=500 \
+  --save_steps=100 \
+  --iterations=100 2>&1 | tee command_output.txt
+```
+
+Turns out, it might not have been working b/c I forgot to comment out the code in another document. 
+
+*Also didn't work, possibly because of how I've implemented it. I suspect it's the timer. In any case, I don't really care. Let's just get it working. *
+
+#### Trial 11
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=True \
+  --eval_all_ckpt=True \
+  --task_name=imdb \
+  --data_dir=/home/jammu55048/aclImdb \
+  --output_dir=${GS_ROOT}/experimentation_phase_2/trial_11/proc_data/imdb \
+  --model_dir=${GS_ROOT}/experimentation_phase_2/trial_11/exp/imdb \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=512 \
+  --train_batch_size=32 \
+  --eval_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=2e-5 \
+  --train_steps=4000 \
+  --warmup_steps=500 \
+  --save_steps=500 \
+  --iterations=500 2>&1 | tee command_output.txt
+```
+
+The final shot. 
 
 ## SQuAD
 ### Experimentation Phase 3
