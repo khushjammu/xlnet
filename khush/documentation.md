@@ -126,6 +126,67 @@ python run_classifier.py \
 
 *Trial five worked! The amount of samples it takes is slow but it fucking works.*
 
+#### Trial 6,7 
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=True \
+  --eval_all_ckpt=True \
+  --task_name=imdb \
+  --data_dir=/home/jammu55048/aclImdb \
+  --output_dir=${GS_ROOT}/experimentation_phase_2/trial_6/proc_data/imdb \
+  --model_dir=${GS_ROOT}/experimentation_phase_2/trial_6/exp/imdb \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=512 \
+  --train_batch_size=32 \
+  --eval_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=2e-5 \
+  --train_steps=4000 \
+  --warmup_steps=500 \
+  --save_steps=500 \
+  --iterations=500 2>&1 | tee command_output.txt
+```
+
+Trying to increase the number of profiles now. General experimentation. 
+
+#### Trial 8
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=True \
+  --eval_all_ckpt=True \
+  --task_name=imdb \
+  --data_dir=/home/jammu55048/aclImdb \
+  --output_dir=${GS_ROOT}/experimentation_phase_2/trial_8/proc_data/imdb \
+  --model_dir=${GS_ROOT}/experimentation_phase_2/trial_8/exp/imdb \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=512 \
+  --train_batch_size=32 \
+  --eval_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=2e-5 \
+  --train_steps=4000 \
+  --warmup_steps=500 \
+  --save_steps=500 \
+  --iterations=500 2>&1 | tee command_output.txt
+```
+
+It's taking too long. I'm cutting down the number of iterations.
 
 ## SQuAD
 ### Experimentation Phase 3

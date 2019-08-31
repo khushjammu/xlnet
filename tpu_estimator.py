@@ -2635,8 +2635,9 @@ class TPUEstimator(estimator_lib.Estimator):
                 },
                                            every_n_iter=logging_hook_frequency))
             
+            print("APPENDING TPU PROFILER HOOK")
             hooks.append(
-              TPUProfilerHook("ctpu-cli", self.model_dir, logging_hook_frequency)
+              TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=logging_hook_frequency)
               )
             examples_hook._set_steps_per_run(  # pylint: disable=protected-access
                 self._config.tpu_config.iterations_per_loop)
