@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #### local path
-SQUAD_DIR=/home/jammu55048/data/squad
+SQUAD_DIR=/home/jammu55048/xlnet/data/squad
 INIT_CKPT_DIR=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16
 
 #### google storage path
@@ -37,4 +37,4 @@ python run_squad.py \
   --save_steps=1000 \
   --train_steps=8000 \
   --warmup_steps=1000 \
-  $@
+  $@ 2>&1 | tee command_output.txt

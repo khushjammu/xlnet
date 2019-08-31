@@ -95,7 +95,7 @@ python run_classifier.py \
   --iterations=500 2>&1 | tee command_output.txt
 ```
 
-#### Trial 3,4
+#### Trial 3,4,5 (just replace number in file directories)
 
 ```bash
 python run_classifier.py \
@@ -123,3 +123,81 @@ python run_classifier.py \
   --save_steps=500 \
   --iterations=500 2>&1 | tee command_output.txt
 ```
+
+*Trial five worked! The amount of samples it takes is slow but it fucking works.*
+
+
+## SQuAD
+### Experimentation Phase 3
+
+Now that IMDB is working, time for SQuAD. I preprocessed the data by modifying `prepro_squad.sh` as follows:
+
+```bash
+#!/bin/bash
+
+#### local path
+SQUAD_DIR=/home/jammu55048/data/squad
+INIT_CKPT_DIR=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16
+
+#### google storage path
+GS_ROOT=gs://khush_ee
+GS_PROC_DATA_DIR=${GS_ROOT}/proc_data/squad
+
+python run_squad.py \
+  --use_tpu=False \
+  --do_prepro=True \
+  --spiece_model_file=${INIT_CKPT_DIR}/spiece.model \
+  --train_file=${SQUAD_DIR}/train-v2.0.json \
+  --output_dir=${GS_PROC_DATA_DIR} \
+  --uncased=False \
+  --max_seq_length=512 \
+  --num_proc=4
+  $@
+```
+
+When copying and pasting the above, I saw the option for multi-processing. I feel like an idiot. Next time, read the whole script before running it. 
+
+Anyway, now to try and get the finetuning for SQuAD working. 
+
+#### Trial 1
+
+The bash script `tpu_squad_large.sh` just runs the python script `run_squad.py` with some parameters. Way easier just to run it directly — much more control.
+
+
+```bash
+python run_squad.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --model_config_path=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --output_dir=${GS_ROOT}/proc_data/squad \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --model_dir=${GS_ROOT}/experimentation_phase_3/experiment/squad \
+  --train_file=/home/jammu55048/xlnet/data/squad/train-v2.0.json \
+  --predict_file=/home/jammu55048/xlnet/data/squad/dev-v2.0.json \
+  --uncased=False \
+  --max_seq_length=512 \
+  --do_train=True \
+  --train_batch_size=48 \
+  --do_predict=True \
+  --predict_batch_size=32 \
+  --learning_rate=3e-5 \
+  --adam_epsilon=1e-6 \
+  --iterations=1000 \
+  --save_steps=1000 \
+  --train_steps=8000 \
+  --warmup_steps=1000 \
+  $@ 2>&1 | tee command_output.txt
+```
+
+I need to determine whether or not the script writes anything to the `output_dir`, which might seem stupid but that directory is where the preprocessed SQuAD data lives, so it'll be strange if it's written to. For future reference:
+
+```shell
+jammu55048@ctpu-cli:~/xlnet$ gsutil ls ${GS_ROOT}/proc_data/squad
+gs://khush_ee/proc_data/squad/
+gs://khush_ee/proc_data/squad/spiece.model.0.slen-512.qlen-64.train.tf_record
+```
+
+This worked fine. It started training. Next step: integrating profiler. To do so I'll return to previous stage. 
