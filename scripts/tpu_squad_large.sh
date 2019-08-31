@@ -2,7 +2,7 @@
 
 #### local path
 SQUAD_DIR=/home/jammu55048/data/squad
-INIT_CKPT_DIR=xlnet_cased_L-24_H-1024_A-16
+INIT_CKPT_DIR=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16
 
 #### google storage path
 GS_ROOT=gs://khush_ee
