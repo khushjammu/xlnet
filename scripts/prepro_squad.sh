@@ -16,6 +16,7 @@ python run_squad.py \
   --output_dir=${GS_PROC_DATA_DIR} \
   --uncased=False \
   --max_seq_length=512 \
+  --num_proc=4
   $@
 
 #### Potential multi-processing version
