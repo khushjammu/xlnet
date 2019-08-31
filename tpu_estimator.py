@@ -2637,9 +2637,10 @@ class TPUEstimator(estimator_lib.Estimator):
             
             # wasn't printed in phase 2 trial 8. probably b/c didn't use `logging`
             # print("APPENDING TPU PROFILER HOOK")
-            # hooks.append(
-              # TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=logging_hook_frequency)
-              # )
+            logging.info("appending TPUProfilerHook")
+            hooks.append(
+              TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=logging_hook_frequency)
+              )
             examples_hook._set_steps_per_run(  # pylint: disable=protected-access
                 self._config.tpu_config.iterations_per_loop)
             hooks.append(examples_hook)
@@ -2658,10 +2659,10 @@ class TPUEstimator(estimator_lib.Estimator):
             checkpoint_hook._set_steps_per_run(  # pylint: disable=protected-access
                 self._config.tpu_config.iterations_per_loop)
             chief_hooks.append(checkpoint_hook)
-            logging.info("adding TPUProfilerHook to chief_hooks")
-            chief_hooks.append(
-              TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=self._config.save_checkpoints_steps)
-              )
+            # logging.info("adding TPUProfilerHook to chief_hooks")
+            # chief_hooks.append(
+            #   TPUProfilerHook("ctpu-cli", self.model_dir, save_steps=self._config.save_checkpoints_steps)
+            #   )
 
           summary.scalar(model_fn_lib.LOSS_METRIC_KEY, loss)
           with ops.control_dependencies([loss]):

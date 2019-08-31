@@ -157,7 +157,7 @@ python run_classifier.py \
 
 Trying to increase the number of profiles now. General experimentation. 
 
-#### Trial 8
+#### Trial 8,9
 
 ```bash
 python run_classifier.py \
@@ -182,11 +182,13 @@ python run_classifier.py \
   --learning_rate=2e-5 \
   --train_steps=4000 \
   --warmup_steps=500 \
-  --save_steps=500 \
-  --iterations=500 2>&1 | tee command_output.txt
+  --save_steps=100 \
+  --iterations=100 2>&1 | tee command_output.txt
 ```
 
 It's taking too long. I'm cutting down the number of iterations.
+
+*FAILED.* Couldn't get it working. Whatever — will use my current way of doing it. 
 
 ## SQuAD
 ### Experimentation Phase 3

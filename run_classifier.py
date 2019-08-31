@@ -725,9 +725,9 @@ def main(_):
     #   output_dir=FLAGS.model_dir,
     #   show_memory=True)
 
-    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=10)
+    # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=10)
     # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=6)
-    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=[profiling_hook])
+    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps #, hooks=[profiling_hook])
 
   if FLAGS.do_eval or FLAGS.do_predict:
     if FLAGS.eval_split == "dev":
