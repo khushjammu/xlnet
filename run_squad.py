@@ -30,6 +30,9 @@ import model_utils
 import squad_utils
 from data_utils import SEP_ID, CLS_ID, VOCAB_SIZE
 
+from tpu_profiler_hook import TPUProfilerHook
+
+
 SPIECE_UNDERLINE = u'▁'
 
 SEG_ID_P   = 0
@@ -1206,7 +1209,10 @@ def main(_):
         drop_remainder=True,
         num_hosts=FLAGS.num_hosts)
 
-    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps)
+    profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_steps=100)
+    # profiling_hook = TPUProfilerHook(FLAGS.tpu, FLAGS.model_dir, save_secs=6)
+    estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps, hooks=[profiling_hook])
+    # estimator.train(input_fn=train_input_fn, max_steps=FLAGS.train_steps)
 
   if FLAGS.do_predict:
     eval_examples = read_squad_examples(FLAGS.predict_file, is_training=False)

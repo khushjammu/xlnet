@@ -254,6 +254,8 @@ python run_classifier.py \
 
 The final shot. 
 
+I FUCKED IT UP by not pushing the commit which added back in the profiler, so the whole run was wasted. I'm not going to re-run it now: I just need one profile. Better to get SQuAD done first. 
+
 ## SQuAD
 ### Experimentation Phase 3
 
