@@ -1,11 +1,11 @@
 #!/bin/bash
 
 #### local path
-SQUAD_DIR=data/squad
-INIT_CKPT_DIR=xlnet_cased_L-24_H-1024_A-16
+SQUAD_DIR=/home/jammu55048/data/squad
+INIT_CKPT_DIR=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16
 
 #### google storage path
-GS_ROOT=
+GS_ROOT=gs://khush_ee
 GS_PROC_DATA_DIR=${GS_ROOT}/proc_data/squad
 
 python run_squad.py \
