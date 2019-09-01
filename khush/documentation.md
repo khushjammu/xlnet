@@ -329,4 +329,134 @@ gs://khush_ee/proc_data/squad/
 gs://khush_ee/proc_data/squad/spiece.model.0.slen-512.qlen-64.train.tf_record
 ```
 
-This worked fine. It started training. Next step: integrating profiler. To do so I'll return to previous stage. 
+This worked fine. It started training. Next step: integrating profiler. To do so I'll return to previous stage. Note: I forgot to save it to a specific trial folder so the file structure is a bit messy. To be fixed. 
+
+#### Trial 2
+
+Going to try it with profiler now. Here goes. 
+```bash
+python run_squad.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --model_config_path=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --output_dir=${GS_ROOT}/proc_data/squad \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --model_dir=${GS_ROOT}/experimentation_phase_3/trial_2/experiment/squad \
+  --train_file=/home/jammu55048/xlnet/data/squad/train-v2.0.json \
+  --predict_file=/home/jammu55048/xlnet/data/squad/dev-v2.0.json \
+  --uncased=False \
+  --max_seq_length=512 \
+  --do_train=True \
+  --train_batch_size=48 \
+  --do_predict=True \
+  --predict_batch_size=32 \
+  --learning_rate=3e-5 \
+  --adam_epsilon=1e-6 \
+  --iterations=1000 \
+  --save_steps=1000 \
+  --train_steps=8000 \
+  --warmup_steps=1000 \
+  $@ 2>&1 | tee command_output.txt
+```
+
+Worked awesomely!
+
+## GLUE
+### Experimentation Phase 4
+
+I want one more test that works so I can say I've tested a wide variety. 
+
+
+#### Trial 1
+
+Command I used for training. 
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=False \
+  --task_name=sts-b \
+  --data_dir=/home/jammu55048/xlnet/glue_data/STS-B \
+  --output_dir=gs://khush_ee/experimentation_phase_4/trial_1/proc_data/sts-b \
+  --model_dir=gs://khush_ee/experimentation_phase_4/trial_1/exp/sts-b \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=128 \
+  --train_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=5e-5 \
+  --train_steps=1200 \
+  --warmup_steps=120 \
+  --save_steps=600 \
+  --is_regression=True 2>&1 | tee command_output.txt
+```
+
+Like a dumbass, I forgot to make the eval flag so I went ahead and used below for eval. 
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=False \
+  --do_eval=True \
+  --task_name=sts-b \
+  --data_dir=/home/jammu55048/xlnet/glue_data/STS-B \
+  --output_dir=gs://khush_ee/experimentation_phase_4/trial_1/proc_data/sts-b \
+  --model_dir=gs://khush_ee/experimentation_phase_4/trial_1/exp/sts-b \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --max_seq_length=128 \
+  --eval_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --eval_all_ckpt=True \
+  --is_regression=True 2>&1 | tee command_output.txt
+```
+
+#### Trial 2
+
+Profiler only ran once and that too when it wasn't using the TPU smh. I'll just run the profiler manually. 
+
+```bash
+python run_classifier.py \
+  --use_tpu=True \
+  --tpu=${TPU_NAME} \
+  --do_train=True \
+  --do_eval=False \
+  --task_name=sts-b \
+  --data_dir=/home/jammu55048/xlnet/glue_data/STS-B \
+  --output_dir=gs://khush_ee/experimentation_phase_4/trial_2/proc_data/sts-b \
+  --model_dir=gs://khush_ee/experimentation_phase_4/trial_2/exp/sts-b \
+  --uncased=False \
+  --spiece_model_file=/home/jammu55048/xlnet_cased_L-24_H-1024_A-16/spiece.model \
+  --model_config_path=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_config.json \
+  --init_checkpoint=${GS_ROOT}/xlnet_cased_L-24_H-1024_A-16/xlnet_model.ckpt \
+  --max_seq_length=128 \
+  --train_batch_size=8 \
+  --num_hosts=1 \
+  --num_core_per_host=8 \
+  --learning_rate=5e-5 \
+  --train_steps=1200 \
+  --warmup_steps=120 \
+  --save_steps=600 \
+  --is_regression=True 2>&1 | tee command_output.txt
+```
+
+Command for manual profiling: 
+```bash
+capture_tpu_profile --tpu=$TPU_NAME --logdir=gs://khush_ee/experimentation_phase_4/trial_2/exp/sts-b
+```
+
+Worked good enough. Time to work on BERT now. 
+
+
+
